@@ -3,16 +3,22 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
 
 from .backends import LLMBackend, OllamaBackend
 from .exceptions import WebsumError
 from .summarizer import Summarizer
 
-if TYPE_CHECKING:
-    pass
-
 logger = logging.getLogger(__name__)
+
+SUPPORTED_LANGUAGES: tuple[str, ...] = (
+    "Turkish",
+    "English",
+    "Spanish",
+    "French",
+    "German",
+    "Italian",
+    "Portuguese",
+)
 
 
 def build_app(backend: LLMBackend | None = None):  # type: ignore[no-untyped-def]
@@ -21,18 +27,30 @@ def build_app(backend: LLMBackend | None = None):  # type: ignore[no-untyped-def
 
     summarizer = Summarizer(backend=backend or OllamaBackend())
 
-    def _summarize(url: str) -> tuple[str, gr.Button]:
+    def _summarize(url: str) -> tuple[str, gr.Dropdown, gr.Button]:
         if not url.strip():
-            return "Please enter a URL.", gr.Button(visible=False)
+            return (
+                "Please enter a URL.",
+                gr.Dropdown(visible=False),
+                gr.Button(visible=False),
+            )
         try:
             text = summarizer.summarize(url)
         except WebsumError as exc:
-            return f"Error: {exc}", gr.Button(visible=False)
-        return text, gr.Button("Translate", visible=True)
+            return (
+                f"Error: {exc}",
+                gr.Dropdown(visible=False),
+                gr.Button(visible=False),
+            )
+        return (
+            text,
+            gr.Dropdown(visible=True),
+            gr.Button("Translate", visible=True),
+        )
 
-    def _translate(text: str) -> str:
+    def _translate(text: str, language: str) -> str:
         try:
-            return summarizer.translate(text)
+            return summarizer.translate(text, target_language=language)
         except WebsumError as exc:
             return f"Error: {exc}"
 
@@ -42,6 +60,12 @@ def build_app(backend: LLMBackend | None = None):  # type: ignore[no-untyped-def
             url = gr.Text(label="URL", placeholder="Enter URL here")
             btn_generate = gr.Button("Generate", variant="primary")
             summary = gr.Markdown(label="Summary")
+            language = gr.Dropdown(
+                choices=list(SUPPORTED_LANGUAGES),
+                value=SUPPORTED_LANGUAGES[0],
+                label="Translate to",
+                visible=False,
+            )
             btn_translate = gr.Button(visible=False)
 
         gr.Examples(
@@ -53,8 +77,8 @@ def build_app(backend: LLMBackend | None = None):  # type: ignore[no-untyped-def
             inputs=[url],
         )
 
-        btn_generate.click(_summarize, inputs=[url], outputs=[summary, btn_translate])
-        btn_translate.click(_translate, inputs=[summary], outputs=[summary])
+        btn_generate.click(_summarize, inputs=[url], outputs=[summary, language, btn_translate])
+        btn_translate.click(_translate, inputs=[summary, language], outputs=[summary])
 
     return demo
 
