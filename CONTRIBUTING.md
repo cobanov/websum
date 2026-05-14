@@ -7,8 +7,8 @@ Thanks for your interest in improving websum. This document covers the dev setup
 Requirements: Python 3.10+ and [uv](https://docs.astral.sh/uv/).
 
 ```bash
-git clone https://github.com/mertcobanov/easy-web-summarizer
-cd easy-web-summarizer
+git clone https://github.com/cobanov/websum
+cd websum
 uv sync --all-extras
 uv run pre-commit install
 ```

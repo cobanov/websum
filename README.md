@@ -1,6 +1,6 @@
 # websum
 
-[![CI](https://github.com/mertcobanov/easy-web-summarizer/actions/workflows/ci.yml/badge.svg)](https://github.com/mertcobanov/easy-web-summarizer/actions/workflows/ci.yml)
+[![CI](https://github.com/cobanov/websum/actions/workflows/ci.yml/badge.svg)](https://github.com/cobanov/websum/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/pypi/pyversions/websum.svg)](https://pypi.org/project/websum/)
 [![PyPI](https://img.shields.io/pypi/v/websum.svg)](https://pypi.org/project/websum/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -123,8 +123,8 @@ The 0.1.x scripts under `app/` (`summarizer.py`, `translator.py`, `yt_summarizer
 ## Development
 
 ```bash
-git clone https://github.com/mertcobanov/easy-web-summarizer
-cd easy-web-summarizer
+git clone https://github.com/cobanov/websum
+cd websum
 uv sync --all-extras
 uv run pre-commit install
 uv run pytest

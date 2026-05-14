@@ -39,4 +39,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - First public scripts under `app/` using LangChain + ChatOllama.
 - Gradio UI, web page and YouTube summarization, Turkish translation.
 
-[0.2.0]: https://github.com/mertcobanov/easy-web-summarizer/releases/tag/v0.2.0
+[0.2.0]: https://github.com/cobanov/websum/releases/tag/v0.2.0

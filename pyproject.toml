@@ -56,10 +56,10 @@ dev = [
 websum = "websum.cli:app"
 
 [project.urls]
-Homepage = "https://github.com/mertcobanov/easy-web-summarizer"
-Repository = "https://github.com/mertcobanov/easy-web-summarizer"
-Issues = "https://github.com/mertcobanov/easy-web-summarizer/issues"
-Changelog = "https://github.com/mertcobanov/easy-web-summarizer/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/cobanov/websum"
+Repository = "https://github.com/cobanov/websum"
+Issues = "https://github.com/cobanov/websum/issues"
+Changelog = "https://github.com/cobanov/websum/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/websum"]
