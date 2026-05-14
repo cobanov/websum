@@ -1,6 +1,0 @@
-gradio
-langchain
-langchain_community
-beautifulsoup4
-youtube-transcript-api
-tiktoken
