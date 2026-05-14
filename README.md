@@ -1,9 +1,9 @@
 # websum
 
 [![CI](https://github.com/cobanov/websum/actions/workflows/ci.yml/badge.svg)](https://github.com/cobanov/websum/actions/workflows/ci.yml)
-[![Python](https://img.shields.io/pypi/pyversions/websum.svg)](https://pypi.org/project/websum/)
-[![PyPI](https://img.shields.io/pypi/v/websum.svg)](https://pypi.org/project/websum/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/websum?style=flat-square&cacheSeconds=300)](https://pypi.org/project/websum/)
+[![Python](https://img.shields.io/pypi/pyversions/websum?style=flat-square&cacheSeconds=300)](https://pypi.org/project/websum/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 
 Summarize web pages and YouTube videos with pluggable LLM backends. Ships with first-class support for **Ollama** (local) and **OpenAI**, plus an optional Gradio web UI.
 
