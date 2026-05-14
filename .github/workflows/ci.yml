@@ -72,7 +72,7 @@ jobs:
         run: uv run --python "$PY_VER" pytest --cov=websum --cov-report=xml
       - name: Upload coverage
         if: matrix.python-version == '3.12'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-xml
           path: coverage.xml
@@ -88,7 +88,7 @@ jobs:
       - name: Build
         run: uv build
       - name: Upload dists
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist/
