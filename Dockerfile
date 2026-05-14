@@ -1,25 +1,29 @@
-# Use an official Python runtime as the base image
-FROM python:3.9-slim
+FROM python:3.12-slim AS builder
 
-# Set the working directory in the container
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    UV_LINK_MODE=copy \
+    UV_PYTHON_DOWNLOADS=never
+
+COPY --from=ghcr.io/astral-sh/uv:0.5 /uv /uvx /usr/local/bin/
+
 WORKDIR /app
+COPY pyproject.toml uv.lock* README.md ./
+COPY src ./src
 
-# Copy the requirements file into the container
-COPY requirements.txt .
+RUN uv sync --frozen --no-dev --extra ollama --extra ui 2>/dev/null || \
+    uv sync --no-dev --extra ollama --extra ui
 
-# Install the required dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+FROM python:3.12-slim
 
-# Copy the rest of the application code into the container
-COPY . .
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    GRADIO_SERVER_NAME=0.0.0.0 \
+    PATH="/app/.venv/bin:$PATH"
 
-# Expose the port that the application will listen on
+WORKDIR /app
+COPY --from=builder /app /app
+
 EXPOSE 7860
 
-# Set the environment variable
-ENV GRADIO_SERVER_NAME="127.0.0.1"
-
-# Define the command to run the application
-CMD ["python", "app/webui.py"]
-
-
+CMD ["websum", "ui", "--host", "0.0.0.0", "--port", "7860"]

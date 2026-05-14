@@ -1,0 +1,153 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "websum"
+version = "0.2.0"
+description = "Summarize web pages and YouTube videos with pluggable LLM backends (Ollama, OpenAI)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Mert Cobanov", email = "mertcobanov@gmail.com" }]
+keywords = ["summarization", "llm", "ollama", "openai", "langchain", "youtube", "web"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Text Processing :: Linguistic",
+]
+dependencies = [
+    "langchain>=0.3,<0.4",
+    "langchain-core>=0.3,<0.4",
+    "langchain-community>=0.3,<0.4",
+    "langchain-text-splitters>=0.3,<0.4",
+    "beautifulsoup4>=4.12",
+    "youtube-transcript-api>=0.6",
+    "typer>=0.12",
+]
+
+[project.optional-dependencies]
+ollama = ["langchain-ollama>=0.2"]
+openai = ["langchain-openai>=0.2"]
+ui = ["gradio>=4.40"]
+all = [
+    "langchain-ollama>=0.2",
+    "langchain-openai>=0.2",
+    "gradio>=4.40",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "pytest-randomly>=3.15",
+    "ruff>=0.6",
+    "mypy>=1.10",
+    "pre-commit>=3.7",
+    "types-beautifulsoup4",
+]
+
+[project.scripts]
+websum = "websum.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/mertcobanov/easy-web-summarizer"
+Repository = "https://github.com/mertcobanov/easy-web-summarizer"
+Issues = "https://github.com/mertcobanov/easy-web-summarizer/issues"
+Changelog = "https://github.com/mertcobanov/easy-web-summarizer/blob/main/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/websum"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/websum",
+    "tests",
+    "examples",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "pyproject.toml",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+    "N",   # pep8-naming
+    "SIM", # flake8-simplify
+    "RUF", # ruff-specific
+]
+ignore = [
+    "E501", # line too long, handled by formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["B011", "N802"]
+"examples/**/*.py" = ["E402"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["websum"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_any_generics = true
+no_implicit_optional = true
+files = ["src/websum"]
+
+[[tool.mypy.overrides]]
+module = [
+    "langchain.*",
+    "langchain_core.*",
+    "langchain_community.*",
+    "langchain_ollama.*",
+    "langchain_openai.*",
+    "langchain_text_splitters.*",
+    "youtube_transcript_api.*",
+    "gradio.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+]
+testpaths = ["tests"]
+markers = [
+    "integration: requires a running LLM backend (Ollama or OpenAI)",
+    "network: requires network access",
+    "slow: long-running tests",
+]
+
+[tool.coverage.run]
+source = ["src/websum"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
