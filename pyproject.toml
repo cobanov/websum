@@ -25,7 +25,7 @@ classifiers = [
 ]
 dependencies = [
     "langchain>=0.3,<1.4",
-    "langchain-core>=0.3,<1.5",
+    "langchain-core>=0.3,<1.6",
     "langchain-community>=0.3,<0.5",
     "langchain-text-splitters>=0.3,<1.2",
     "beautifulsoup4>=4.12",
