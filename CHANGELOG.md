@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - YouTube links with extra query parameters (`&t=`, `&list=`), `v` not first, the mobile site, Shorts, live streams and embeds are recognized as videos. They were summarized as web pages instead of from their transcript.
+- YouTube links pasted without `https://` (`youtu.be/ID`) load their transcript. They were recognized as videos but the transcript loader could not find the video ID.
 
 ## [0.2.0] - 2026-05-14
 

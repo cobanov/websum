@@ -4,7 +4,12 @@ from __future__ import annotations
 
 import pytest
 
-from websum import InvalidURLError, is_youtube_url, load_youtube_transcript
+from websum import (
+    InvalidURLError,
+    TranscriptUnavailableError,
+    is_youtube_url,
+    load_youtube_transcript,
+)
 
 
 @pytest.mark.parametrize(
@@ -52,3 +57,19 @@ def test_is_youtube_url_false(url: str) -> None:
 def test_load_youtube_transcript_rejects_non_youtube_url() -> None:
     with pytest.raises(InvalidURLError):
         load_youtube_transcript("https://example.com")
+
+
+def test_load_youtube_transcript_adds_missing_scheme(monkeypatch: pytest.MonkeyPatch) -> None:
+    from langchain_community.document_loaders import YoutubeLoader
+
+    seen = []
+
+    def fake(url: str, **kwargs: object) -> object:
+        seen.append(YoutubeLoader.extract_video_id(url))
+        raise RuntimeError("stop before the network")
+
+    monkeypatch.setattr(YoutubeLoader, "from_youtube_url", staticmethod(fake))
+    for url in ("youtu.be/dQw4w9WgXcQ", "www.youtube.com/shorts/dQw4w9WgXcQ"):
+        with pytest.raises(TranscriptUnavailableError):
+            load_youtube_transcript(url)
+    assert seen == ["dQw4w9WgXcQ", "dQw4w9WgXcQ"]

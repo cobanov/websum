@@ -71,6 +71,9 @@ def load_youtube_transcript(
     """
     if not is_youtube_url(url):
         raise InvalidURLError(f"Not a valid YouTube URL: {url}")
+    # YoutubeLoader cannot find the video ID without a scheme ("youtu.be/ID").
+    if "://" not in url:
+        url = "https://" + url
 
     from langchain_community.document_loaders import YoutubeLoader
 
